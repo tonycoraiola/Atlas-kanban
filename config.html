@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configurações — mente.</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .config-page {
+        display: flex;
+        height: 100vh;
+        gap: 0;
+      }
+
+      .config-header {
+        position: sticky;
+        top: 0;
+        padding: 16px 28px;
+        border-bottom: 1px solid var(--border);
+        background: rgba(14, 14, 16, 0.94);
+        backdrop-filter: blur(14px);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .config-header-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .config-header-back {
+        background: none;
+        border: none;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 24px;
+        padding: 8px;
+        transition: all 0.2s;
+      }
+
+      .config-header-back:hover {
+        color: var(--text);
+      }
+
+      .config-header-title {
+        font-family: "Syne", sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .config-container {
+        display: flex;
+        gap: 0;
+        height: calc(100vh - 57px);
+        width: 100%;
+      }
+
+      .config-sidebar {
+        width: 200px;
+        background: var(--surface2);
+        border-right: 1px solid var(--border);
+        padding: 20px 0;
+        overflow-y: auto;
+        flex-shrink: 0;
+      }
+
+      .config-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .config-menu-item {
+        width: 100%;
+        padding: 12px 18px;
+        border: none;
+        background: none;
+        color: var(--muted);
+        font-family: "DM Mono", monospace;
+        font-size: 12px;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.15s;
+        border-left: 3px solid transparent;
+      }
+
+      .config-menu-item:hover {
+        background: rgba(200, 240, 96, 0.05);
+        color: var(--text);
+      }
+
+      .config-menu-item.active {
+        background: rgba(200, 240, 96, 0.1);
+        color: var(--accent);
+        border-left-color: var(--accent);
+      }
+
+      .config-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 32px 40px;
+        max-width: 800px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .config-title {
+        font-family: "Syne", sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 28px;
+        letter-spacing: -0.5px;
+      }
+
+      .config-section {
+        margin-bottom: 36px;
+      }
+
+      .section-title {
+        font-family: "Syne", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 18px;
+        opacity: 0.7;
+      }
+
+      .config-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      }
+
+      .config-row:last-child {
+        border-bottom: none;
+      }
+
+      .config-row > label:first-child {
+        min-width: 200px;
+      }
+
+      .config-label {
+        font-family: "Syne", sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .config-desc {
+        display: block;
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 4px;
+        line-height: 1.4;
+      }
+
+      .config-label-group {
+        width: 100%;
+      }
+
+      .config-input {
+        width: 100%;
+        max-width: 360px;
+        padding: 10px 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        font-family: "DM Mono", monospace;
+        font-size: 12px;
+        transition: all 0.2s;
+      }
+
+      .config-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        background: var(--surface2);
+      }
+
+      .config-input:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .config-field-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        max-width: 360px;
+      }
+
+      .avatar-circle-sm {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), #a8e000);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        color: #0e0e10;
+        flex-shrink: 0;
+      }
+
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+        flex-shrink: 0;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle-label {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        transition: all 0.2s;
+        border-radius: 12px;
+      }
+
+      .toggle-switch input:checked + .toggle-label {
+        background-color: var(--accent);
+        border-color: var(--accent);
+      }
+
+      .toggle-label:after {
+        content: "";
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        left: 3px;
+        bottom: 2px;
+        background-color: #0e0e10;
+        transition: 0.2s;
+        border-radius: 50%;
+      }
+
+      .toggle-switch input:checked + .toggle-label:after {
+        left: 22px;
+      }
+
+      .theme-selector {
+        display: flex;
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .theme-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: none;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: var(--muted);
+        font-size: 11px;
+        font-family: "DM Mono", monospace;
+      }
+
+      .theme-btn:hover {
+        border-color: var(--accent);
+        color: var(--text);
+      }
+
+      .theme-btn.active {
+        border-color: var(--accent);
+        background: rgba(200, 240, 96, 0.08);
+        color: var(--accent);
+      }
+
+      .theme-preview {
+        width: 60px;
+        height: 40px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+      }
+
+      .theme-preview.light {
+        background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+        border-color: #ddd;
+      }
+
+      .theme-preview.auto {
+        background: linear-gradient(90deg, #fff 0%, #0e0e10 100%);
+      }
+
+      .theme-preview.dark {
+        background: linear-gradient(135deg, #1a1a1f 0%, #0e0e10 100%);
+      }
+
+      .plan-card {
+        padding: 20px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        margin-top: 12px;
+      }
+
+      .plan-name {
+        font-family: "Syne", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .plan-desc {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+
+      .usage-stat {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      }
+
+      .usage-stat:last-child {
+        border-bottom: none;
+      }
+
+      .usage-label {
+        font-size: 12px;
+        color: var(--text);
+      }
+
+      .usage-value {
+        font-family: "Syne", sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .connector-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .connector-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+
+      .connector-item span {
+        font-size: 12px;
+        color: var(--text);
+      }
+
+      .btn-secondary {
+        padding: 7px 16px;
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-secondary:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: rgba(200, 240, 96, 0.06);
+      }
+
+      .config-tab {
+        display: none;
+      }
+
+      .config-tab.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="config-page">
+      <!-- HEADER -->
+      <div
+        style="
+          width: 100%;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 100;
+        "
+      >
+        <div class="config-header">
+          <div class="config-header-left">
+            <button class="config-header-back" onclick="goBack()">←</button>
+            <div class="config-header-title">Configurações</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTAINER -->
+      <div class="config-container" style="margin-top: 57px">
+        <!-- SIDEBAR -->
+        <aside class="config-sidebar">
+          <div class="config-menu">
+            <button
+              class="config-menu-item active"
+              onclick="switchTab('geral')"
+            >
+              ⚙️ Geral
+            </button>
+            <button class="config-menu-item" onclick="switchTab('conta')">
+              👤 Conta
+            </button>
+            <button class="config-menu-item" onclick="switchTab('privacidade')">
+              🔒 Privacidade
+            </button>
+            <button class="config-menu-item" onclick="switchTab('cobranca')">
+              💳 Cobrança
+            </button>
+            <button class="config-menu-item" onclick="switchTab('uso')">
+              📊 Uso
+            </button>
+            <button class="config-menu-item" onclick="switchTab('conectores')">
+              🔗 Conectores
+            </button>
+          </div>
+        </aside>
+
+        <!-- CONTENT -->
+        <main class="config-content">
+          <!-- TAB: GERAL -->
+          <div id="tab-geral" class="config-tab active">
+            <h2 class="config-title">Geral</h2>
+
+            <div class="config-section">
+              <h3 class="section-title">Perfil</h3>
+              <div class="config-row">
+                <label class="config-label">Nome completo</label>
+                <div class="config-field-group">
+                  <div class="avatar-circle-sm">
+                    <span id="avatar-initial">U</span>
+                  </div>
+                  <input
+                    type="text"
+                    id="name"
+                    placeholder="Tony"
+                    class="config-input"
+                  />
+                </div>
+              </div>
+              <div class="config-row">
+                <label class="config-label"
+                  >Como mente. deveria te chamar?</label
+                >
+                <input
+                  type="text"
+                  id="nickname"
+                  placeholder="Tony"
+                  class="config-input"
+                />
+              </div>
+            </div>
+
+            <div class="config-section">
+              <h3 class="section-title">Notificações</h3>
+              <div class="config-row">
+                <div class="config-label-group">
+                  <label class="config-label">Conclusões de resposta</label>
+                  <span class="config-desc"
+                    >Notifique-me quando uma resposta terminar. Útil para
+                    tarefas longas.</span
+                  >
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="notif-completion" checked />
+                  <label for="notif-completion" class="toggle-label"></label>
+                </div>
+              </div>
+              <div class="config-row">
+                <div class="config-label-group">
+                  <label class="config-label">Atualizações do app</label>
+                  <span class="config-desc"
+                    >Receba notificações sobre novas funcionalidades e
+                    melhorias.</span
+                  >
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="notif-updates" checked />
+                  <label for="notif-updates" class="toggle-label"></label>
+                </div>
+              </div>
+            </div>
+
+            <div class="config-section">
+              <h3 class="section-title">Aparência</h3>
+              <div class="config-row">
+                <label class="config-label">Modo de cor</label>
+                <div class="theme-selector">
+                  <button
+                    class="theme-btn active"
+                    onclick="setTheme('light', event)"
+                  >
+                    <div class="theme-preview light"></div>
+                    <span>Básico</span>
+                  </button>
+                  <button class="theme-btn" onclick="setTheme('auto', event)">
+                    <div class="theme-preview auto"></div>
+                    <span>Auto</span>
+                  </button>
+                  <button class="theme-btn" onclick="setTheme('dark', event)">
+                    <div class="theme-preview dark"></div>
+                    <span>Escuro</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: CONTA -->
+          <div id="tab-conta" class="config-tab">
+            <h2 class="config-title">Conta</h2>
+            <div class="config-section">
+              <h3 class="section-title">Informações da conta</h3>
+              <div class="config-row">
+                <label class="config-label">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="seu@email.com"
+                  class="config-input"
+                />
+              </div>
+              <div class="config-row">
+                <label class="config-label">Membro desde</label>
+                <input
+                  type="text"
+                  value="26 de Fevereiro de 2026"
+                  disabled
+                  class="config-input"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: PRIVACIDADE -->
+          <div id="tab-privacidade" class="config-tab">
+            <h2 class="config-title">Privacidade</h2>
+            <div class="config-section">
+              <h3 class="section-title">Dados dos usuários</h3>
+              <div class="config-row">
+                <div class="config-label-group">
+                  <label class="config-label">Armazenar conversas</label>
+                  <span class="config-desc"
+                    >Mantenha seu histórico de conversas sincronizado.</span
+                  >
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="privacy-storage" checked />
+                  <label for="privacy-storage" class="toggle-label"></label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: COBRANÇA -->
+          <div id="tab-cobranca" class="config-tab">
+            <h2 class="config-title">Cobrança</h2>
+            <div class="config-section">
+              <h3 class="section-title">Plano atual</h3>
+              <div class="plan-card">
+                <div class="plan-name">Plano Gratuito</div>
+                <div class="plan-desc">
+                  Acesso limitado a todas as funcionalidades
+                </div>
+                <button class="btn-secondary" style="margin-top: 12px">
+                  Fazer upgrade
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: USO -->
+          <div id="tab-uso" class="config-tab">
+            <h2 class="config-title">Uso</h2>
+            <div class="config-section">
+              <h3 class="section-title">Estatísticas</h3>
+              <div class="usage-stat">
+                <div class="usage-label">Cards criados</div>
+                <div class="usage-value" id="stat-cards">0</div>
+              </div>
+              <div class="usage-stat">
+                <div class="usage-label">Notas criadas</div>
+                <div class="usage-value" id="stat-notes">0</div>
+              </div>
+              <div class="usage-stat">
+                <div class="usage-label">Tarefas concluídas</div>
+                <div class="usage-value" id="stat-completed">0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: CONECTORES -->
+          <div id="tab-conectores" class="config-tab">
+            <h2 class="config-title">Conectores</h2>
+            <div class="config-section">
+              <h3 class="section-title">Integrações disponíveis</h3>
+              <div class="connector-list">
+                <div class="connector-item">
+                  <span>📧 Email</span>
+                  <button class="btn-secondary">Conectar</button>
+                </div>
+                <div class="connector-item">
+                  <span>🔄 Sincronização</span>
+                  <button class="btn-secondary">Configurar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      function switchTab(tabName) {
+        document.querySelectorAll(".config-menu-item").forEach((el) => {
+          el.classList.remove("active");
+        });
+        document.querySelectorAll(".config-tab").forEach((el) => {
+          el.classList.remove("active");
+        });
+
+        event.target.classList.add("active");
+        document.getElementById("tab-" + tabName).classList.add("active");
+      }
+
+      function setTheme(theme, e) {
+        document.querySelectorAll(".theme-btn").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        e.target.closest(".theme-btn").classList.add("active");
+        localStorage.setItem("mente_theme", theme);
+      }
+
+      function goBack() {
+        window.history.back();
+      }
+
+      function loadData() {
+        const user = JSON.parse(localStorage.getItem("mente_user") || "{}");
+
+        document.getElementById("name").value = user.name || "";
+        document.getElementById("email").value = user.email || "";
+        document.getElementById("nickname").value = user.nickname || "";
+
+        const initial = (user.name || "U").charAt(0).toUpperCase();
+        document.getElementById("avatar-initial").textContent = initial;
+
+        // Salva dados ao sair da página
+        window.addEventListener("beforeunload", () => {
+          const userData = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            nickname: document.getElementById("nickname").value,
+          };
+          localStorage.setItem("mente_user", JSON.stringify(userData));
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", loadData);
+    </script>
+  </body>
+</html>
