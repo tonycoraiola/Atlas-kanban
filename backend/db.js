@@ -37,11 +37,11 @@ async function initDb() {
     )
   `);
 
-  await pool.query(`
+await pool.query(`
     CREATE TABLE IF NOT EXISTS fin_records (
       id SERIAL PRIMARY KEY,
       "cardId" INTEGER,
-      desc TEXT,
+      "desc" TEXT,
       valor REAL,
       status TEXT,
       origin TEXT
