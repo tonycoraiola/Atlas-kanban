@@ -1,79 +1,72 @@
 'use strict';
 
-const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
+const { Pool } = require('pg');
 
-const DB_PATH = path.join(__dirname, 'data.db');
-let db;
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+});
 
-function initDb() {
-  if (db) return db;
+async function initDb() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS cards (
+      id SERIAL PRIMARY KEY,
+      title TEXT NOT NULL,
+      col TEXT NOT NULL,
+      tag TEXT NOT NULL,
+      valor REAL,
+      due TEXT,
+      "intType" TEXT,
+      "noteId" TEXT,
+      created TEXT,
+      deleted INTEGER DEFAULT 0
+    )
+  `);
 
-  db = new sqlite3.Database(DB_PATH);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS notes (
+      id TEXT PRIMARY KEY,
+      emoji TEXT,
+      title TEXT,
+      folder TEXT,
+      content TEXT,
+      date TEXT,
+      tags TEXT,
+      "fromKanban" INTEGER,
+      "cardId" INTEGER
+    )
+  `);
 
-  db.serialize(() => {
-    db.run(`
-      CREATE TABLE IF NOT EXISTS cards (
-        id INTEGER PRIMARY KEY,
-        title TEXT NOT NULL,
-        col TEXT NOT NULL,
-        tag TEXT NOT NULL,
-        valor REAL,
-        due TEXT,
-        intType TEXT,
-        noteId TEXT,
-        created TEXT,
-        deleted INTEGER DEFAULT 0
-      )
-    `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS fin_records (
+      id SERIAL PRIMARY KEY,
+      "cardId" INTEGER,
+      desc TEXT,
+      valor REAL,
+      status TEXT,
+      origin TEXT
+    )
+  `);
 
-    db.run(`
-      CREATE TABLE IF NOT EXISTS notes (
-        id TEXT PRIMARY KEY,
-        emoji TEXT,
-        title TEXT,
-        folder TEXT,
-        content TEXT,
-        date TEXT,
-        tags TEXT,
-        fromKanban INTEGER,
-        cardId INTEGER
-      )
-    `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      username TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL
+    )
+  `);
 
-    db.run(`ALTER TABLE cards ADD COLUMN deleted INTEGER DEFAULT 0`, () => {});
+  await pool.query(`
+    INSERT INTO users (username, password)
+    VALUES ($1, $2)
+    ON CONFLICT (username) DO NOTHING
+  `, ['teste@mente.com', '123456']);
 
-    db.run(`
-      CREATE TABLE IF NOT EXISTS fin_records (
-        id INTEGER PRIMARY KEY,
-        cardId INTEGER,
-        desc TEXT,
-        valor REAL,
-        status TEXT,
-        origin TEXT
-      )
-    `);
-
-    db.run(`
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
-      )
-    `);
-
-    db.run(
-      `INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)`,
-      ['teste@mente.com', '123456']
-    );
-  });
-
-  return db;
+  console.log('Banco de dados inicializado.');
 }
 
 function getDb() {
-  if (!db) initDb();
-  return db;
+  return pool;
 }
 
 module.exports = { initDb, getDb };
