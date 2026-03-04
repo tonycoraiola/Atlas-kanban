@@ -7,450 +7,114 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #0e0e10;
-    --surface: #17171a;
-    --surface2: #1f1f23;
-    --border: #2a2a30;
-    --accent: #c8f060;
-    --text: #e8e8ec;
-    --muted: #6b6b7a;
-  }
-
-  body {
-    font-family: 'DM Mono', monospace;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* BACKGROUND GLOW */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -60%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(200,240,96,0.05) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  /* NOISE */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    opacity: 0.35;
-  }
-
-  /* GRID LINES */
-  .grid-bg {
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(200,240,96,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(200,240,96,0.03) 1px, transparent 1px);
-    background-size: 48px 48px;
-    pointer-events: none;
-  }
-
-  /* CARD */
-  .login-wrap {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 380px;
-    padding: 0 24px;
-    animation: fadeUp 0.6s cubic-bezier(0.34,1.2,0.64,1) both;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* LOGO */
-  .logo-area {
-    margin-bottom: 40px;
-    text-align: center;
-  }
-
-  .logo-mark {
-    width: 48px;
-    height: 48px;
-    background: var(--accent);
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 22px;
-    color: #0e0e10;
-    box-shadow: 0 0 32px rgba(200,240,96,0.25);
-    transition: box-shadow 0.3s;
-  }
-
-  .logo-mark:hover {
-    box-shadow: 0 0 48px rgba(200,240,96,0.4);
-  }
-
-  .logo-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 26px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: var(--text);
-  }
-
-  .logo-name span { color: var(--accent); }
-
-  .logo-sub {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 4px;
-    letter-spacing: 0.5px;
-  }
-
-  /* FORM CARD */
-  .card {
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-  }
-
-  .card-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 24px;
-    color: var(--text);
-  }
-
-  .field {
-    margin-bottom: 14px;
-  }
-
-  .field label {
-    display: block;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
-
-  .field input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 11px 14px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  .field input::placeholder { color: var(--muted); }
-
-  .field input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(200,240,96,0.08);
-  }
-
-  .forgot {
-    text-align: right;
-    margin-top: -6px;
-    margin-bottom: 20px;
-  }
-
-  .forgot a {
-    font-size: 11px;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s;
-    cursor: pointer;
-  }
-
-  .forgot a:hover { color: var(--accent); }
-
-  .btn-enter {
-    width: 100%;
-    background: var(--accent);
-    border: none;
-    color: #0e0e10;
-    padding: 13px;
-    border-radius: 10px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 14px;
-    letter-spacing: 0.3px;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-enter::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
-    pointer-events: none;
-  }
-
-  .btn-enter:hover {
-    filter: brightness(1.08);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(200,240,96,0.25);
-  }
-
-  .btn-enter:active { transform: translateY(0); }
-
-  /* LOADING STATE */
-  .btn-enter.loading {
-    pointer-events: none;
-    opacity: 0.8;
-  }
-
-  .btn-enter.loading::before {
-    content: '';
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border: 2px solid rgba(0,0,0,0.3);
-    border-top-color: #0e0e10;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin-right: 8px;
-    vertical-align: middle;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  /* ERROR */
-  .error-msg {
-    font-size: 12px;
-    color: #f06080;
-    margin-top: 12px;
-    text-align: center;
-    display: none;
-    animation: fadeUp 0.3s ease;
-  }
-
-  .error-msg.show { display: block; }
-
-  /* DIVIDER */
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 20px 0;
-  }
-
-  .divider::before, .divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .divider span {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.5px;
-  }
-
-  .btn-register {
-    width: 100%;
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 11px;
-    border-radius: 10px;
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-register:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  /* FOOTER */
-  footer {
-    position: fixed;
-    bottom: 20px;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.3px;
-    z-index: 10;
-    text-align: center;
-  }
-
-  /* SUCCESS overlay */
-  .success-overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--bg);
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 16px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s;
-  }
-
-  .success-overlay.show {
-    opacity: 1;
-    pointer-events: all;
-  }
-
-  .success-check {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: rgba(200,240,96,0.1);
-    border: 2px solid var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
-  }
-
-  @keyframes popIn {
-    from { transform: scale(0); opacity: 0; }
-    to   { transform: scale(1); opacity: 1; }
-  }
-
-  .success-text {
-    font-family: 'Syne', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--accent);
-  }
-
-  .success-sub {
-    font-size: 12px;
-    color: var(--muted);
-  }
+  :root { --bg:#0e0e10;--surface:#17171a;--surface2:#1f1f23;--border:#2a2a30;--accent:#c8f060;--text:#e8e8ec;--muted:#6b6b7a; }
+  body { font-family:'DM Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden; }
+  body::before { content:'';position:fixed;top:50%;left:50%;transform:translate(-50%,-60%);width:600px;height:600px;background:radial-gradient(circle,rgba(200,240,96,0.05) 0%,transparent 70%);pointer-events:none; }
+  body::after { content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;opacity:.35; }
+  .grid-bg { position:fixed;inset:0;background-image:linear-gradient(rgba(200,240,96,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(200,240,96,0.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none; }
+  .login-wrap { position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;width:100%;max-width:380px;padding:0 24px;animation:fadeUp .6s cubic-bezier(.34,1.2,.64,1) both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)} }
+  .logo-area { margin-bottom:40px;text-align:center; }
+  .logo-mark { width:48px;height:48px;background:var(--accent);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#0e0e10;box-shadow:0 0 32px rgba(200,240,96,.25);transition:box-shadow .3s; }
+  .logo-mark:hover { box-shadow:0 0 48px rgba(200,240,96,.4); }
+  .logo-name { font-family:'Syne',sans-serif;font-size:26px;font-weight:800;letter-spacing:-.5px;color:var(--text); }
+  .logo-name span { color:var(--accent); }
+  .logo-sub { font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:.5px; }
+  .card { width:100%;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px; }
+  .card-title { font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:24px;color:var(--text); }
+  .field { margin-bottom:14px; }
+  .field label { display:block;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px; }
+  .field input { width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:11px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s; }
+  .field input::placeholder { color:var(--muted); }
+  .field input:focus { border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,240,96,.08); }
+  .forgot { text-align:right;margin-top:-6px;margin-bottom:20px; }
+  .forgot a { font-size:11px;color:var(--muted);text-decoration:none;transition:color .2s;cursor:pointer; }
+  .forgot a:hover { color:var(--accent); }
+  .btn-enter { width:100%;background:var(--accent);border:none;color:#0e0e10;padding:13px;border-radius:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;letter-spacing:.3px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden; }
+  .btn-enter:hover { filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 8px 24px rgba(200,240,96,.25); }
+  .btn-enter:active { transform:translateY(0); }
+  .btn-enter.loading { pointer-events:none;opacity:.8; }
+  .btn-enter.loading::before { content:'';display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,.3);border-top-color:#0e0e10;border-radius:50%;animation:spin .7s linear infinite;margin-right:8px;vertical-align:middle; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  .error-msg { font-size:12px;color:#f06080;margin-top:12px;text-align:center;display:none;animation:fadeUp .3s ease; }
+  .error-msg.show { display:block; }
+  .divider { display:flex;align-items:center;gap:12px;margin:20px 0; }
+  .divider::before,.divider::after { content:'';flex:1;height:1px;background:var(--border); }
+  .divider span { font-size:11px;color:var(--muted);letter-spacing:.5px; }
+  .btn-register { width:100%;background:none;border:1px solid var(--border);color:var(--muted);padding:11px;border-radius:10px;font-family:'DM Mono',monospace;font-size:13px;cursor:pointer;transition:all .2s; }
+  .btn-register:hover { border-color:var(--accent);color:var(--accent); }
+  footer { position:fixed;bottom:20px;font-size:11px;color:var(--muted);letter-spacing:.3px;z-index:10;text-align:center; }
+  .success-overlay { position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;opacity:0;pointer-events:none;transition:opacity .4s; }
+  .success-overlay.show { opacity:1;pointer-events:all; }
+  .success-check { width:64px;height:64px;border-radius:50%;background:rgba(200,240,96,.1);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:28px;animation:popIn .4s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes popIn { from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1} }
+  .success-text { font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--accent); }
+  .success-sub { font-size:12px;color:var(--muted); }
 </style>
 </head>
 <body>
-
 <div class="grid-bg"></div>
-
 <div class="login-wrap">
   <div class="logo-area">
     <div class="logo-mark">m</div>
     <div class="logo-name">mente<span>.</span></div>
     <div class="logo-sub">sua segunda mente</div>
   </div>
-
   <div class="card">
     <div class="card-title">Entrar na sua conta</div>
-
     <div class="field">
       <label>Usuário</label>
       <input type="text" id="inp-user" placeholder="seu usuário ou e-mail" autocomplete="username">
     </div>
-
     <div class="field">
       <label>Senha</label>
       <input type="password" id="inp-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter') doLogin()">
     </div>
-
     <div class="forgot"><a>Esqueceu sua senha?</a></div>
-
     <button class="btn-enter" id="btn-login" onclick="doLogin()">Entrar</button>
-
     <div class="error-msg" id="error-msg">Usuário ou senha incorretos. Tente novamente.</div>
-
     <div class="divider"><span>ou</span></div>
-
     <button class="btn-register">Criar conta</button>
   </div>
 </div>
-
 <footer>mente. · sua segunda mente · 2025</footer>
-
-<!-- SUCCESS -->
 <div class="success-overlay" id="success">
   <div class="success-check">✓</div>
   <div class="success-text">Bem-vindo de volta!</div>
   <div class="success-sub">Redirecionando para o Kanban...</div>
 </div>
-
 <script>
+const API_URL = 'https://atlas-production-a815.up.railway.app';
+
 async function doLogin() {
   const user = document.getElementById('inp-user').value.trim();
   const pass = document.getElementById('inp-pass').value;
   const btn  = document.getElementById('btn-login');
   const err  = document.getElementById('error-msg');
-
   err.classList.remove('show');
-
   if (!user || !pass) {
     err.textContent = 'Preencha usuário e senha.';
     err.classList.add('show');
     return;
   }
-
   btn.classList.add('loading');
   btn.textContent = '';
   btn.insertAdjacentText('beforeend', 'Entrando...');
-
   try {
-    const res = await fetch('http://localhost:3001/auth/login', {
+    const res = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: user, password: pass }),
     });
-
     btn.classList.remove('loading');
     btn.textContent = 'Entrar';
-
     if (!res.ok) {
-      if (res.status === 401) {
-        err.textContent = 'Usuário ou senha incorretos.';
-      } else {
-        err.textContent = 'Erro ao conectar com o servidor.';
-      }
+      err.textContent = res.status === 401 ? 'Usuário ou senha incorretos.' : 'Erro ao conectar com o servidor.';
       err.classList.add('show');
       return;
     }
-
     document.getElementById('success').classList.add('show');
-    setTimeout(() => {
-      window.location.href = 'index.html';
-    }, 1500);
+    setTimeout(() => { window.location.href = 'index.html'; }, 1500);
   } catch (e) {
     btn.classList.remove('loading');
     btn.textContent = 'Entrar';
@@ -461,4 +125,3 @@ async function doLogin() {
 </script>
 </body>
 </html>
-
