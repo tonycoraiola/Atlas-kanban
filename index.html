@@ -1,408 +1,620 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Atlas.</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-
-<!-- ═══════════════════════════════════════════
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas.</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ═══════════════════════════════════════════
      HEADER
 ════════════════════════════════════════════ -->
-<header>
-  <div class="logo">
-    <div class="logo-sq">a</div>
-    atlas<span>.</span>
-  </div>
-  <nav>
-    <a onclick="showView('kanban')"     id="nav-kanban"     class="active">Kanban</a>
-    <a onclick="showView('agenda')"     id="nav-agenda">Agenda</a>
-    <a onclick="showView('financeiro')" id="nav-financeiro">Financeiro</a>
-    <a onclick="showView('notas')"      id="nav-notas">Notas</a>
-  </nav>
-  <button class="header-add-btn" id="header-add-btn" onclick="headerAdd()">+ Nova tarefa</button>
-</header>
+    <header>
+      <div class="logo">
+        <div class="logo-sq">a</div>
+        atlas<span>.</span>
+      </div>
+      <nav>
+        <a onclick="showView('kanban')" id="nav-kanban" class="active"
+          >Kanban</a
+        >
+        <a onclick="showView('agenda')" id="nav-agenda">Agenda</a>
+        <a onclick="showView('financeiro')" id="nav-financeiro">Financeiro</a>
+        <a onclick="showView('notas')" id="nav-notas">Notas</a>
+      </nav>
+      <button class="header-add-btn" id="header-add-btn" onclick="headerAdd()">
+        + Nova tarefa
+      </button>
+    </header>
 
-<main>
-
-  <!-- ═══════════════════════════════════════
+    <main>
+      <!-- ═══════════════════════════════════════
        KANBAN
   ═══════════════════════════════════════ -->
-  <div id="view-kanban" class="view padded active">
-    <div class="page-header">
-      <div>
-        <div class="page-title">Kanban</div>
-        <div class="page-subtitle">Todo card criado aqui gera uma nota vinculada automaticamente</div>
-      </div>
-    </div>
-    <div id="int-banner" class="int-banner" style="display:none">
-      <div class="dot"></div>
-      <span id="banner-msg"></span>
-    </div>
-    <div class="board">
-      <div class="column" id="col-todo"
-           ondragover="onDragOver(event,'todo')"
-           ondrop="onDrop(event,'todo')"
-           ondragleave="onDragLeave(event)">
-        <div class="col-header">
-          <div class="col-title"><div class="col-dot" style="background:var(--todo)"></div>A Fazer</div>
-          <div class="col-header-right">
-            <span class="col-count" id="count-todo">0</span>
-            <button class="col-add" onclick="openModal('todo')">+</button>
+      <div id="view-kanban" class="view padded active">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Kanban</div>
+            <div class="page-subtitle">
+              Todo card criado aqui gera uma nota vinculada automaticamente
+            </div>
           </div>
         </div>
-        <div class="cards" id="cards-todo"></div>
-      </div>
+        <div id="int-banner" class="int-banner" style="display: none">
+          <div class="dot"></div>
+          <span id="banner-msg"></span>
+        </div>
+        <div class="board">
+          <div
+            class="column"
+            id="col-todo"
+            ondragover="onDragOver(event, 'todo')"
+            ondrop="onDrop(event, 'todo')"
+            ondragleave="onDragLeave(event)"
+          >
+            <div class="col-header">
+              <div class="col-title">
+                <div class="col-dot" style="background: var(--todo)"></div>
+                A Fazer
+              </div>
+              <div class="col-header-right">
+                <span class="col-count" id="count-todo">0</span>
+                <button class="col-add" onclick="openModal('todo')">+</button>
+              </div>
+            </div>
+            <div class="cards" id="cards-todo"></div>
+          </div>
 
-      <div class="column" id="col-doing"
-           ondragover="onDragOver(event,'doing')"
-           ondrop="onDrop(event,'doing')"
-           ondragleave="onDragLeave(event)">
-        <div class="col-header">
-          <div class="col-title"><div class="col-dot" style="background:var(--doing)"></div>Em Progresso</div>
-          <div class="col-header-right">
-            <span class="col-count" id="count-doing">0</span>
-            <button class="col-add" onclick="openModal('doing')">+</button>
+          <div
+            class="column"
+            id="col-doing"
+            ondragover="onDragOver(event, 'doing')"
+            ondrop="onDrop(event, 'doing')"
+            ondragleave="onDragLeave(event)"
+          >
+            <div class="col-header">
+              <div class="col-title">
+                <div class="col-dot" style="background: var(--doing)"></div>
+                Em Progresso
+              </div>
+              <div class="col-header-right">
+                <span class="col-count" id="count-doing">0</span>
+                <button class="col-add" onclick="openModal('doing')">+</button>
+              </div>
+            </div>
+            <div class="cards" id="cards-doing"></div>
+          </div>
+
+          <div
+            class="column"
+            id="col-done"
+            ondragover="onDragOver(event, 'done')"
+            ondrop="onDrop(event, 'done')"
+            ondragleave="onDragLeave(event)"
+          >
+            <div class="col-header">
+              <div class="col-title">
+                <div class="col-dot" style="background: var(--done)"></div>
+                Feito
+              </div>
+              <div class="col-header-right">
+                <span class="col-count" id="count-done">0</span>
+                <button class="col-add" onclick="openModal('done')">+</button>
+              </div>
+            </div>
+            <div class="cards" id="cards-done"></div>
           </div>
         </div>
-        <div class="cards" id="cards-doing"></div>
       </div>
 
-      <div class="column" id="col-done"
-           ondragover="onDragOver(event,'done')"
-           ondrop="onDrop(event,'done')"
-           ondragleave="onDragLeave(event)">
-        <div class="col-header">
-          <div class="col-title"><div class="col-dot" style="background:var(--done)"></div>Feito</div>
-          <div class="col-header-right">
-            <span class="col-count" id="count-done">0</span>
-            <button class="col-add" onclick="openModal('done')">+</button>
-          </div>
-        </div>
-        <div class="cards" id="cards-done"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════
+      <!-- ═══════════════════════════════════════
        AGENDA
   ═══════════════════════════════════════ -->
-  <div id="view-agenda" class="view">
-    <div class="agenda-wrap">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Agenda</div>
-          <div class="page-subtitle">Prazos do Kanban aparecem aqui automaticamente · Clima em tempo real</div>
+      <div id="view-agenda" class="view">
+        <div class="agenda-wrap">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Agenda</div>
+              <div class="page-subtitle">
+                Prazos do Kanban aparecem aqui automaticamente · Clima em tempo
+                real
+              </div>
+            </div>
+            <button
+              class="add-btn"
+              onclick="
+                showView('kanban');
+                setTimeout(openModal, 100);
+              "
+            >
+              + Novo evento
+            </button>
+          </div>
+
+          <div class="year-strip" id="year-strip"></div>
+
+          <div class="agenda-layout">
+            <div>
+              <div class="cal-card">
+                <div class="cal-header">
+                  <div class="cal-month-title" id="cal-title"></div>
+                  <div class="cal-nav">
+                    <button onclick="changeMonth(-1)">‹</button>
+                    <button
+                      onclick="goToday()"
+                      style="font-size: 11px; width: auto; padding: 0 10px"
+                    >
+                      hoje
+                    </button>
+                    <button onclick="changeMonth(1)">›</button>
+                  </div>
+                </div>
+                <div class="cal-grid-header">
+                  <div class="cal-day-name">Dom</div>
+                  <div class="cal-day-name">Seg</div>
+                  <div class="cal-day-name">Ter</div>
+                  <div class="cal-day-name">Qua</div>
+                  <div class="cal-day-name">Qui</div>
+                  <div class="cal-day-name">Sex</div>
+                  <div class="cal-day-name">Sáb</div>
+                </div>
+                <div class="cal-grid" id="cal-grid"></div>
+              </div>
+              <div class="year-overview" id="year-overview"></div>
+            </div>
+
+            <div class="side-panel">
+              <!-- WEATHER -->
+              <div class="weather-card">
+                <div id="weather-loading" class="weather-loading">
+                  <div style="font-size: 24px; margin-bottom: 8px">🌡️</div>
+                  Carregando clima...
+                </div>
+                <div id="weather-content" style="display: none">
+                  <div class="weather-top">
+                    <div>
+                      <div id="w-icon" class="weather-icon">☁️</div>
+                      <div id="w-desc" class="weather-desc">—</div>
+                      <div class="weather-city">São José dos Campos, SP</div>
+                    </div>
+                    <div class="weather-right">
+                      <div id="w-temp" class="weather-temp">--°</div>
+                      <div
+                        id="w-feels"
+                        style="
+                          font-size: 11px;
+                          color: var(--muted);
+                          margin-top: 4px;
+                        "
+                      >
+                        Sensação --°
+                      </div>
+                    </div>
+                  </div>
+                  <div class="weather-details">
+                    <div class="w-detail">
+                      <div class="w-detail-label">💧 Umidade</div>
+                      <div class="w-detail-val" id="w-humidity">--%</div>
+                    </div>
+                    <div class="w-detail">
+                      <div class="w-detail-label">💨 Vento</div>
+                      <div class="w-detail-val" id="w-wind">-- km/h</div>
+                    </div>
+                    <div class="w-detail">
+                      <div class="w-detail-label">☀️ Máx</div>
+                      <div class="w-detail-val" id="w-max">--°</div>
+                    </div>
+                    <div class="w-detail">
+                      <div class="w-detail-label">🌙 Mín</div>
+                      <div class="w-detail-val" id="w-min">--°</div>
+                    </div>
+                  </div>
+                  <div class="weather-forecast" id="w-forecast"></div>
+                </div>
+                <div
+                  id="weather-err"
+                  class="weather-error"
+                  style="display: none"
+                >
+                  Clima indisponível. Verifique sua conexão.
+                </div>
+              </div>
+
+              <!-- EVENTS DO DIA -->
+              <div class="events-card">
+                <div class="events-header">
+                  <div class="events-title">📋 Eventos</div>
+                  <div class="events-date-label" id="sel-date-label">Hoje</div>
+                </div>
+                <div class="events-list" id="events-list">
+                  <div class="no-events">Selecione um dia para ver eventos</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <button class="add-btn" onclick="showView('kanban'); setTimeout(openModal, 100)">+ Novo evento</button>
       </div>
 
-      <div class="year-strip" id="year-strip"></div>
-
-      <div class="agenda-layout">
-        <div>
-          <div class="cal-card">
-            <div class="cal-header">
-              <div class="cal-month-title" id="cal-title"></div>
-              <div class="cal-nav">
-                <button onclick="changeMonth(-1)">‹</button>
-                <button onclick="goToday()" style="font-size:11px;width:auto;padding:0 10px;">hoje</button>
-                <button onclick="changeMonth(1)">›</button>
-              </div>
-            </div>
-            <div class="cal-grid-header">
-              <div class="cal-day-name">Dom</div><div class="cal-day-name">Seg</div>
-              <div class="cal-day-name">Ter</div><div class="cal-day-name">Qua</div>
-              <div class="cal-day-name">Qui</div><div class="cal-day-name">Sex</div>
-              <div class="cal-day-name">Sáb</div>
-            </div>
-            <div class="cal-grid" id="cal-grid"></div>
-          </div>
-          <div class="year-overview" id="year-overview"></div>
-        </div>
-
-        <div class="side-panel">
-          <!-- WEATHER -->
-          <div class="weather-card">
-            <div id="weather-loading" class="weather-loading">
-              <div style="font-size:24px;margin-bottom:8px">🌡️</div>
-              Carregando clima...
-            </div>
-            <div id="weather-content" style="display:none">
-              <div class="weather-top">
-                <div>
-                  <div id="w-icon" class="weather-icon">☁️</div>
-                  <div id="w-desc" class="weather-desc">—</div>
-                  <div class="weather-city">São José dos Campos, SP</div>
-                </div>
-                <div class="weather-right">
-                  <div id="w-temp" class="weather-temp">--°</div>
-                  <div id="w-feels" style="font-size:11px;color:var(--muted);margin-top:4px;">Sensação --°</div>
-                </div>
-              </div>
-              <div class="weather-details">
-                <div class="w-detail"><div class="w-detail-label">💧 Umidade</div><div class="w-detail-val" id="w-humidity">--%</div></div>
-                <div class="w-detail"><div class="w-detail-label">💨 Vento</div><div class="w-detail-val"   id="w-wind">-- km/h</div></div>
-                <div class="w-detail"><div class="w-detail-label">☀️ Máx</div><div class="w-detail-val"     id="w-max">--°</div></div>
-                <div class="w-detail"><div class="w-detail-label">🌙 Mín</div><div class="w-detail-val"     id="w-min">--°</div></div>
-              </div>
-              <div class="weather-forecast" id="w-forecast"></div>
-            </div>
-            <div id="weather-err" class="weather-error" style="display:none">
-              Clima indisponível. Verifique sua conexão.
-            </div>
-          </div>
-
-          <!-- EVENTS DO DIA -->
-          <div class="events-card">
-            <div class="events-header">
-              <div class="events-title">📋 Eventos</div>
-              <div class="events-date-label" id="sel-date-label">Hoje</div>
-            </div>
-            <div class="events-list" id="events-list">
-              <div class="no-events">Selecione um dia para ver eventos</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════
+      <!-- ═══════════════════════════════════════
        FINANCEIRO
   ═══════════════════════════════════════ -->
-  <div id="view-financeiro" class="view padded">
-    <div class="page-header">
-      <div>
-        <div class="page-title">Financeiro</div>
-        <div class="page-subtitle">Registros automáticos do Kanban</div>
+      <div id="view-financeiro" class="view padded">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Financeiro</div>
+            <div class="page-subtitle">Registros automáticos do Kanban</div>
+          </div>
+        </div>
+        <div class="fin-grid">
+          <div class="fin-card">
+            <div class="fin-card-label">Pago</div>
+            <div class="fin-card-value green" id="fin-total-pago">R$ 0,00</div>
+          </div>
+          <div class="fin-card">
+            <div class="fin-card-label">A Pagar</div>
+            <div class="fin-card-value red" id="fin-total-pendente">
+              R$ 0,00
+            </div>
+          </div>
+          <div class="fin-card">
+            <div class="fin-card-label">Guardado</div>
+            <div class="fin-card-value blue" id="fin-total-guardado">
+              R$ 0,00
+            </div>
+          </div>
+        </div>
+        <div class="fin-table">
+          <div class="fin-table-header">
+            <span>Descrição</span><span>Valor</span><span>Status</span
+            ><span>Origem</span>
+          </div>
+          <div id="fin-rows">
+            <div class="empty">Nenhum registro ainda.</div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="fin-grid">
-      <div class="fin-card">
-        <div class="fin-card-label">Pago</div>
-        <div class="fin-card-value green" id="fin-total-pago">R$ 0,00</div>
-      </div>
-      <div class="fin-card">
-        <div class="fin-card-label">A Pagar</div>
-        <div class="fin-card-value red" id="fin-total-pendente">R$ 0,00</div>
-      </div>
-      <div class="fin-card">
-        <div class="fin-card-label">Guardado</div>
-        <div class="fin-card-value blue" id="fin-total-guardado">R$ 0,00</div>
-      </div>
-    </div>
-    <div class="fin-table">
-      <div class="fin-table-header">
-        <span>Descrição</span><span>Valor</span><span>Status</span><span>Origem</span>
-      </div>
-      <div id="fin-rows"><div class="empty">Nenhum registro ainda.</div></div>
-    </div>
-  </div>
 
-  <!-- ═══════════════════════════════════════
+      <!-- ═══════════════════════════════════════
        NOTAS
   ═══════════════════════════════════════ -->
-  <div id="view-notas" class="view view-notas-layout">
-    <div class="notes-sidebar">
-      <div class="sidebar-top">
-        <div class="sidebar-search">
-          <span class="search-icon">🔍</span>
-          <input type="text" placeholder="Buscar notas..." id="notes-search" oninput="filterNotes()">
-        </div>
-        <button class="sidebar-new-btn" onclick="newNote()"><span>✦</span> Nova nota</button>
-      </div>
-
-      <div class="sidebar-section-label">Pastas</div>
-      <div id="folders-list">
-        <div class="folder-item active" onclick="filterFolder('all')" data-folder="all">
-          <span class="f-icon">📁</span>Todas as notas<span class="f-count" id="fc-all">0</span>
-        </div>
-        <div class="folder-item" onclick="filterFolder('kanban')" data-folder="kanban">
-          <span class="f-icon">📋</span>Do Kanban<span class="f-count" id="fc-kanban">0</span>
-        </div>
-        <div class="folder-item" onclick="filterFolder('pessoal')" data-folder="pessoal">
-          <span class="f-icon">👤</span>Pessoal<span class="f-count" id="fc-pessoal">0</span>
-        </div>
-        <div class="folder-item" onclick="filterFolder('trabalho')" data-folder="trabalho">
-          <span class="f-icon">💼</span>Trabalho<span class="f-count" id="fc-trabalho">0</span>
-        </div>
-        <div class="folder-item" onclick="filterFolder('financeiro')" data-folder="financeiro">
-          <span class="f-icon">💰</span>Financeiro<span class="f-count" id="fc-financeiro">0</span>
-        </div>
-        <div class="folder-item" onclick="filterFolder('ideias')" data-folder="ideias">
-          <span class="f-icon">💡</span>Ideias<span class="f-count" id="fc-ideias">0</span>
-        </div>
-      </div>
-
-      <div class="sidebar-section-label" style="margin-top:8px">Recentes</div>
-      <div class="notes-list-area" id="sidebar-notes-list"></div>
-      <div class="sidebar-tags" id="sidebar-tags"></div>
-    </div>
-
-    <div class="notes-editor-area">
-      <!-- OVERVIEW -->
-      <div class="notes-overview" id="notes-overview">
-        <div class="overview-header">
-          <div>
-            <div class="overview-title" id="overview-folder-title">Todas as notas</div>
-            <div class="overview-sub"   id="overview-count">0 notas</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:center">
-            <div class="view-toggle">
-              <button class="vt-btn active" id="vt-grid" onclick="setViewMode('grid')" title="Grade">⊞</button>
-              <button class="vt-btn"        id="vt-list" onclick="setViewMode('list')" title="Lista">☰</button>
+      <div id="view-notas" class="view view-notas-layout">
+        <div class="notes-sidebar">
+          <div class="sidebar-top">
+            <div class="sidebar-search">
+              <span class="search-icon">🔍</span>
+              <input
+                type="text"
+                placeholder="Buscar notas..."
+                id="notes-search"
+                oninput="filterNotes()"
+              />
             </div>
-            <button class="add-btn" onclick="newNote()">+ Nova nota</button>
+            <button class="sidebar-new-btn" onclick="newNote()">
+              <span>✦</span> Nova nota
+            </button>
           </div>
-        </div>
-        <div id="notes-cards-container"></div>
-      </div>
 
-      <!-- EDITOR -->
-      <div class="editor-wrap" id="editor-wrap">
-        <div class="editor-toolbar">
-          <button class="tb-btn" onclick="fmt('bold')"><b>B</b></button>
-          <button class="tb-btn" onclick="fmt('italic')"><i>I</i></button>
-          <button class="tb-btn" onclick="fmt('underline')"><u>U</u></button>
-          <div class="tb-sep"></div>
-          <button class="tb-btn" onclick="insertBlock('h1')">H1</button>
-          <button class="tb-btn" onclick="insertBlock('h2')">H2</button>
-          <button class="tb-btn" onclick="insertBlock('h3')">H3</button>
-          <div class="tb-sep"></div>
-          <button class="tb-btn" onclick="insertBlock('ul')">• Lista</button>
-          <button class="tb-btn" onclick="insertBlock('ol')">1. Lista</button>
-          <button class="tb-btn" onclick="insertBlock('blockquote')">❝</button>
-          <button class="tb-btn" onclick="insertBlock('code')">&lt;/&gt;</button>
-          <button class="tb-btn" onclick="insertBlock('hr')">—</button>
-          <div class="tb-sep"></div>
-          <select class="tb-tag-select" id="editor-tag" onchange="syncFolderFromToolbar()">
-            <option value="kanban">📋 Kanban</option>
-            <option value="pessoal">👤 Pessoal</option>
-            <option value="trabalho">💼 Trabalho</option>
-            <option value="financeiro">💰 Financeiro</option>
-            <option value="ideias">💡 Ideia</option>
-          </select>
-          <div class="tb-right">
-            <button class="tb-delete" onclick="deleteNote()">🗑 Excluir</button>
-            <button class="tb-save"   onclick="saveNote()">✓ Salvar</button>
-            <button class="tb-btn"    onclick="closeEditor()">✕</button>
-          </div>
-        </div>
-
-        <div class="editor-scroll">
-          <div class="editor-body">
-            <div class="kanban-link-badge" id="kanban-link-badge" style="display:none">
-              <span class="klb-icon">📋</span>
-              <span class="klb-text" id="klb-text">Card vinculado: —</span>
-              <span class="klb-status" id="klb-status"></span>
-              <span class="klb-due" id="klb-due"></span>
-              <button class="klb-goto" onclick="goToLinkedCard()">Ver no Kanban →</button>
+          <div class="sidebar-section-label">Pastas</div>
+          <div id="folders-list">
+            <div
+              class="folder-item active"
+              onclick="filterFolder('all')"
+              data-folder="all"
+            >
+              <span class="f-icon">📁</span>Todas as notas<span
+                class="f-count"
+                id="fc-all"
+                >0</span
+              >
             </div>
+            <div
+              class="folder-item"
+              onclick="filterFolder('kanban')"
+              data-folder="kanban"
+            >
+              <span class="f-icon">📋</span>Do Kanban<span
+                class="f-count"
+                id="fc-kanban"
+                >0</span
+              >
+            </div>
+            <div
+              class="folder-item"
+              onclick="filterFolder('pessoal')"
+              data-folder="pessoal"
+            >
+              <span class="f-icon">👤</span>Pessoal<span
+                class="f-count"
+                id="fc-pessoal"
+                >0</span
+              >
+            </div>
+            <div
+              class="folder-item"
+              onclick="filterFolder('trabalho')"
+              data-folder="trabalho"
+            >
+              <span class="f-icon">💼</span>Trabalho<span
+                class="f-count"
+                id="fc-trabalho"
+                >0</span
+              >
+            </div>
+            <div
+              class="folder-item"
+              onclick="filterFolder('financeiro')"
+              data-folder="financeiro"
+            >
+              <span class="f-icon">💰</span>Financeiro<span
+                class="f-count"
+                id="fc-financeiro"
+                >0</span
+              >
+            </div>
+            <div
+              class="folder-item"
+              onclick="filterFolder('ideias')"
+              data-folder="ideias"
+            >
+              <span class="f-icon">💡</span>Ideias<span
+                class="f-count"
+                id="fc-ideias"
+                >0</span
+              >
+            </div>
+          </div>
 
-            <div class="note-emoji-picker" id="note-emoji" onclick="openEmojiPicker(event)">📝</div>
-            <textarea class="note-title-input" id="note-title" placeholder="Título da nota..." rows="1" oninput="autoResize(this)"></textarea>
+          <div class="sidebar-section-label" style="margin-top: 8px">
+            Recentes
+          </div>
+          <div class="notes-list-area" id="sidebar-notes-list"></div>
+          <div class="sidebar-tags" id="sidebar-tags"></div>
+        </div>
 
-            <div class="note-meta-bar">
-              <div class="meta-item">📅 <span id="meta-date">Hoje</span></div>
-              <div class="meta-item">🏷️
-                <select id="meta-folder" onchange="syncFolderFromMeta()">
-                  <option value="kanban">Do Kanban</option>
-                  <option value="pessoal">Pessoal</option>
-                  <option value="trabalho">Trabalho</option>
-                  <option value="financeiro">Financeiro</option>
-                  <option value="ideias">Ideias</option>
-                </select>
+        <div class="notes-editor-area">
+          <!-- OVERVIEW -->
+          <div class="notes-overview" id="notes-overview">
+            <div class="overview-header">
+              <div>
+                <div class="overview-title" id="overview-folder-title">
+                  Todas as notas
+                </div>
+                <div class="overview-sub" id="overview-count">0 notas</div>
+              </div>
+              <div style="display: flex; gap: 10px; align-items: center">
+                <div class="view-toggle">
+                  <button
+                    class="vt-btn active"
+                    id="vt-grid"
+                    onclick="setViewMode('grid')"
+                    title="Grade"
+                  >
+                    ⊞
+                  </button>
+                  <button
+                    class="vt-btn"
+                    id="vt-list"
+                    onclick="setViewMode('list')"
+                    title="Lista"
+                  >
+                    ☰
+                  </button>
+                </div>
+                <button class="add-btn" onclick="newNote()">+ Nova nota</button>
+              </div>
+            </div>
+            <div id="notes-cards-container"></div>
+          </div>
+
+          <!-- EDITOR -->
+          <div class="editor-wrap" id="editor-wrap">
+            <div class="editor-toolbar">
+              <button class="tb-btn" onclick="fmt('bold')"><b>B</b></button>
+              <button class="tb-btn" onclick="fmt('italic')"><i>I</i></button>
+              <button class="tb-btn" onclick="fmt('underline')">
+                <u>U</u>
+              </button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="insertBlock('h1')">H1</button>
+              <button class="tb-btn" onclick="insertBlock('h2')">H2</button>
+              <button class="tb-btn" onclick="insertBlock('h3')">H3</button>
+              <div class="tb-sep"></div>
+              <button class="tb-btn" onclick="insertBlock('ul')">
+                • Lista
+              </button>
+              <button class="tb-btn" onclick="insertBlock('ol')">
+                1. Lista
+              </button>
+              <button class="tb-btn" onclick="insertBlock('blockquote')">
+                ❝
+              </button>
+              <button class="tb-btn" onclick="insertBlock('code')">
+                &lt;/&gt;
+              </button>
+              <button class="tb-btn" onclick="insertBlock('hr')">—</button>
+              <div class="tb-sep"></div>
+              <select
+                class="tb-tag-select"
+                id="editor-tag"
+                onchange="syncFolderFromToolbar()"
+              >
+                <option value="kanban">📋 Kanban</option>
+                <option value="pessoal">👤 Pessoal</option>
+                <option value="trabalho">💼 Trabalho</option>
+                <option value="financeiro">💰 Financeiro</option>
+                <option value="ideias">💡 Ideia</option>
+              </select>
+              <div class="tb-right">
+                <button class="tb-delete" onclick="deleteNote()">
+                  🗑 Excluir
+                </button>
+                <button class="tb-save" onclick="saveNote()">✓ Salvar</button>
+                <button class="tb-btn" onclick="closeEditor()">✕</button>
               </div>
             </div>
 
-            <div class="content-editor" id="content-editor" contenteditable="true" spellcheck="true"></div>
+            <div class="editor-scroll">
+              <div class="editor-body">
+                <div
+                  class="kanban-link-badge"
+                  id="kanban-link-badge"
+                  style="display: none"
+                >
+                  <span class="klb-icon">📋</span>
+                  <span class="klb-text" id="klb-text">Card vinculado: —</span>
+                  <span class="klb-status" id="klb-status"></span>
+                  <span class="klb-due" id="klb-due"></span>
+                  <button class="klb-goto" onclick="goToLinkedCard()">
+                    Ver no Kanban →
+                  </button>
+                </div>
+
+                <div
+                  class="note-emoji-picker"
+                  id="note-emoji"
+                  onclick="openEmojiPicker(event)"
+                >
+                  📝
+                </div>
+                <textarea
+                  class="note-title-input"
+                  id="note-title"
+                  placeholder="Título da nota..."
+                  rows="1"
+                  oninput="autoResize(this)"
+                ></textarea>
+
+                <div class="note-meta-bar">
+                  <div class="meta-item">
+                    📅 <span id="meta-date">Hoje</span>
+                  </div>
+                  <div class="meta-item">
+                    🏷️
+                    <select id="meta-folder" onchange="syncFolderFromMeta()">
+                      <option value="kanban">Do Kanban</option>
+                      <option value="pessoal">Pessoal</option>
+                      <option value="trabalho">Trabalho</option>
+                      <option value="financeiro">Financeiro</option>
+                      <option value="ideias">Ideias</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div
+                  class="content-editor"
+                  id="content-editor"
+                  contenteditable="true"
+                  spellcheck="true"
+                ></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </main>
 
-</main>
-
-<!-- MODAL — NOVA TAREFA KANBAN -->
-<div class="modal-overlay hidden" id="modal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">Nova Tarefa</div>
-      <button class="modal-close" onclick="closeModal()">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="field">
-        <label>Título</label>
-        <input type="text" id="inp-title" placeholder="Ex: Pagar fatura, Entregar relatório..." oninput="analyzeTask(this.value)">
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Coluna</label>
-          <select id="inp-col">
-            <option value="todo">A Fazer</option>
-            <option value="doing">Em Progresso</option>
-            <option value="done">Feito</option>
-          </select>
+    <!-- MODAL — NOVA TAREFA KANBAN -->
+    <div class="modal-overlay hidden" id="modal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Nova Tarefa</div>
+          <button class="modal-close" onclick="closeModal()">×</button>
         </div>
-        <div class="field">
-          <label>Categoria</label>
-          <select id="inp-tag" onchange="analyzeTask(document.getElementById('inp-title').value)">
-            <option value="auto">🤖 Auto</option>
-            <option value="fin">💰 Financeiro</option>
-            <option value="agenda2">📅 Agenda</option>
-            <option value="geral">✦ Geral</option>
-          </select>
+        <div class="modal-body">
+          <div class="field">
+            <label>Título</label>
+            <input
+              type="text"
+              id="inp-title"
+              placeholder="Ex: Pagar fatura, Entregar relatório..."
+              oninput="analyzeTask(this.value)"
+            />
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Coluna</label>
+              <select id="inp-col">
+                <option value="todo">A Fazer</option>
+                <option value="doing">Em Progresso</option>
+                <option value="done">Feito</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Categoria</label>
+              <select
+                id="inp-tag"
+                onchange="
+                  analyzeTask(document.getElementById('inp-title').value)
+                "
+              >
+                <option value="auto">🤖 Auto</option>
+                <option value="fin">💰 Financeiro</option>
+                <option value="agenda2">📅 Agenda</option>
+                <option value="geral">✦ Geral</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>📅 Data de entrega / prazo</label>
+            <input type="date" id="inp-due" />
+          </div>
+          <div class="field" id="field-valor" style="display: none">
+            <label>Valor (R$)</label>
+            <input
+              type="number"
+              id="inp-valor"
+              placeholder="0,00"
+              step="0.01"
+            />
+          </div>
+          <div class="int-preview" id="int-preview">
+            <div class="int-preview-title">
+              ⚡ Integrações que serão ativadas
+            </div>
+            <div class="int-preview-desc" id="int-preview-desc"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+          <button class="btn-primary" onclick="addCard()">Criar tarefa</button>
         </div>
       </div>
-      <div class="field">
-        <label>📅 Data de entrega / prazo</label>
-        <input type="date" id="inp-due">
-      </div>
-      <div class="field" id="field-valor" style="display:none">
-        <label>Valor (R$)</label>
-        <input type="number" id="inp-valor" placeholder="0,00" step="0.01">
-      </div>
-      <div class="int-preview" id="int-preview">
-        <div class="int-preview-title">⚡ Integrações que serão ativadas</div>
-        <div class="int-preview-desc" id="int-preview-desc"></div>
-      </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
-      <button class="btn-primary"   onclick="addCard()">Criar tarefa</button>
+
+    <!-- SLASH MENU -->
+    <div class="slash-menu" id="slash-menu">
+      <input
+        class="slash-search"
+        id="slash-search"
+        type="text"
+        placeholder="Buscar bloco..."
+        oninput="filterSlash(this.value)"
+      />
+      <div id="slash-items"></div>
     </div>
-  </div>
-</div>
 
-<!-- SLASH MENU -->
-<div class="slash-menu" id="slash-menu">
-  <input class="slash-search" id="slash-search" type="text" placeholder="Buscar bloco..." oninput="filterSlash(this.value)">
-  <div id="slash-items"></div>
-</div>
+    <!-- EMOJI PICKER -->
+    <div class="emoji-picker" id="emoji-picker">
+      <div class="emoji-grid" id="emoji-grid"></div>
+    </div>
 
-<!-- EMOJI PICKER -->
-<div class="emoji-picker" id="emoji-picker">
-  <div class="emoji-grid" id="emoji-grid"></div>
-</div>
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <span id="toast-icon">⚡</span>
+      <div class="toast-msg" id="toast-msg"></div>
+    </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">
-  <span id="toast-icon">⚡</span>
-  <div class="toast-msg" id="toast-msg"></div>
-</div>
-
-<!-- SCRIPTS — ordem importa -->
-<script src="js/state.js"></script>
-<script src="js/kanban.js"></script>
-<script src="js/agenda.js"></script>
-<script src="js/financeiro.js"></script>
-<script src="js/notas.js"></script>
-<script src="js/app.js"></script>
-
-</body>
+    <!-- SCRIPTS — ordem importa -->
+    <script src="js/state.js"></script>
+    <script src="js/kanban.js"></script>
+    <script src="js/agenda.js"></script>
+    <script src="js/financeiro.js"></script>
+    <script src="js/notas.js"></script>
+    <script src="js/app.js"></script>
+  </body>
 </html>
